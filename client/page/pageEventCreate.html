@@ -84,8 +84,10 @@
             }
             else
             {
-                eventManager.logout()
-                callback()
+                eventManager.reload(function()
+                {
+                    callback()
+                })
             }
             
         }
