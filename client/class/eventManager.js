@@ -17,7 +17,7 @@ class EventManager
             id : firebase.auth().currentUser.uid
         }
 
-        comunicationManager.httpPost("eventList", obj, function(ret)
+        httpPost("eventList", obj, function(ret)
         {
             let evList = ret.eventList;
             callback(evList)         
@@ -42,7 +42,6 @@ class EventManager
 
     closeEvent()
     {
-        this.currEvent
         this.currEventId = -1;
         this.currEvent = null;
     }
@@ -56,6 +55,7 @@ class EventManager
 
     reload(callback)
     {
+        $("#listaEventi").empty()
         this.eventList = [];
         this.currEvent = null;
         pageGet("pageHome").loadEventi(function()

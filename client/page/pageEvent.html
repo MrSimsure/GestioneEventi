@@ -11,7 +11,7 @@
             <button type="button" class="btn btn-primary btn-block m-1">Crea Nuova Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1" 
                 onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Elimina Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1" onclick="page().deleteEvent()">Elimina Evento</button>
             <button type="button" class="btn btn-primary btn-block m-1">Profilo</button>
             <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
             <button type="button" class="btn btn-primary btn-block m-1">Notifiche</button>
@@ -28,6 +28,23 @@
     <script>
         let me = page();
         
+        me.deleteEvent = function()
+        {
+            let obj =
+            {
+                id : eventManager.currEvent.eventID,
+            }
+
+            httpPost("eventDelete",obj,function()
+            {
+                eventManager.reload(function()
+                {
+                    pageBackReload()
+                })
+            })
+        }
+
+
         me.loadCategorie = function()
         {
             eventManager.currEvent.getCategories(function(list)

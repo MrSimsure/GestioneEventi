@@ -22,7 +22,7 @@ class Evento
             id : this.id
         }
 
-        comunicationManager.httpPost("categoryList", obj, function(ret)
+        httpPost("categoryList", obj, function(ret)
         {
             let catList = ret.categoryList;
             callback(catList)         
