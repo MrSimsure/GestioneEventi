@@ -1,0 +1,54 @@
+<!doctype html>
+
+<template id="pageCategoryTemplate">
+<div id="pageCategory" class="page">
+
+    <h1 id="title" class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+    <div class="dropdown btn-center-cont">
+        <button class="btn btn-primary btn-block dropdown-toggle btn-center" type="button" data-toggle="dropdown" >Menu Categoria</button>
+        <div class="dropdown-menu left-15" >
+            <button type="button" class="btn btn-primary btn-block m-1">Genera Invito</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Modifica Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Elimina Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
+        </div>
+    </div>
+    <br>
+
+    <ul class="list-group" id="listaUtenti">
+
+    </ul>
+
+
+    <script>
+        let me = page();
+        
+        me.loadUtenti = function()
+        {
+            eventManager.currEvent.getCategories(function(list)
+            {
+                eventManager.currEvent.categoryList = list;
+                for(let i=0; i<list.length; i++)
+                {
+                    let btn = compNew("#listaUtenti", "userButton");
+                    btn.setAttribute("data-utente", i)
+                    btn.querySelector("a").innerHTML = list[i].name
+                }
+            })          
+        }
+
+        me.onBack = function(callback)
+        {
+            //eventManager.currEvent.currCategory.closeUsers()
+            callback()
+        }
+
+        //me.loadUtenti()
+        me.html.querySelector("#title").innerHTML = eventManager.currEvent.currCategory.name
+    </script>
+
+
+</div>
+</template>
+

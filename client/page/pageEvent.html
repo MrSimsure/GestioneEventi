@@ -1,0 +1,58 @@
+<!doctype html>
+
+<template id="pageEventTemplate">
+<div id="pageEvent" class="page">
+
+    <h1 id="title" class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+    <div class="dropdown btn-center-cont">
+        <button class="btn btn-primary btn-block dropdown-toggle btn-center" type="button" data-toggle="dropdown" >Menu Evento</button>
+        <div class="dropdown-menu left-15" >
+            <button type="button" class="btn btn-primary btn-block m-1">Crea Nuova Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1" 
+                onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Elimina Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Profilo</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
+            <button type="button" class="btn btn-primary btn-block m-1">Notifiche</button>
+        </div>
+    </div>
+
+    <br>
+
+    <ul class="list-group" id="listaCategorie">
+
+    </ul>
+
+
+    <script>
+        let me = page();
+        
+        me.loadCategorie = function()
+        {
+            eventManager.currEvent.getCategories(function(list)
+            {
+                eventManager.currEvent.categoryList = list;
+                for(let i=0; i<list.length; i++)
+                {
+                    let btn = compNew("#listaCategorie", "categoryButton");
+                    btn.setAttribute("data-categoria", i)
+                    btn.querySelector("a").innerHTML = list[i].name
+                }
+            })          
+        }
+
+        me.onBack = function(callback)
+        {
+            eventManager.closeEvent()
+            callback()
+        }
+
+        me.loadCategorie()
+        me.html.querySelector("#title").innerHTML = eventManager.currEvent.name
+    </script>
+
+
+</div>
+</template>
+

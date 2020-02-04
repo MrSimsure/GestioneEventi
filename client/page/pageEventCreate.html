@@ -1,0 +1,111 @@
+<!doctype html>
+
+<template id="pageEventCreateTemplate">
+<div id="pageEventCreate" class="page">
+
+    <div>
+        <div class="form-group">
+            <label for="loginMail">Nome Evento</label>
+            <input type="text" class="form-control" id="eventName" placeholder="nome evento">
+        </div>
+
+        <div class="form-group">
+            <label for="loginPassword">Descrizione Evento</label>
+            <input type="text" class="form-control" id="eventDesc" placeholder="descrizione">
+        </div>
+
+        <div class="form-group">
+            <label for="loginPassword">Data Inizio</label>
+            <input type="date" class="form-control" id="eventDataInizio" >
+        </div>
+
+        <div class="form-group">
+            <label for="loginPassword">Data Inizio</label>
+            <input type="date" class="form-control" id="eventDataFine" >
+        </div>
+
+        <br><br>
+        <button id="saveBtn" onclick="page().saveEvent()" class="btn btn-primary btn-block">Salva Nuovo Evento</button>
+
+    </div>
+
+    <script>
+        let me = page();
+        
+        me.saveEvent = function()
+        {
+            let dom = page().html;
+
+            let obj = 
+            {
+                id          :   firebase.auth().currentUser.uid,
+                name        :   dom.querySelector("#eventName").value,
+                startDate   :   dom.querySelector("#eventDataInizio").value,
+                endDate     :   dom.querySelector("#eventDataFine").value,
+                desc        :   dom.querySelector("#eventDesc").value,
+            }
+
+            comunicationManager.httpPost("eventCreate", obj, function(ret)
+            {
+                pageBackReload()
+            })
+        }
+
+        me.editEvent = function()
+        {
+            let dom = page().html;
+
+            let obj = 
+            {
+                id          :   eventManager.currEvent.id,
+                name        :   dom.querySelector("#eventName").value,
+                startDate   :   dom.querySelector("#eventDataInizio").value,
+                endDate     :   dom.querySelector("#eventDataFine").value,
+                desc        :   dom.querySelector("#eventDesc").value,
+            }
+
+            comunicationManager.httpPost("eventEdit", obj, function(ret)
+            {
+                pageBackReload()
+            })
+        }
+        
+
+        me.onBack = function(callback)
+        {
+            if(eventManager.editing == true)
+            {
+                eventManager.editing = false;    
+                $("#listaEventi").empty()
+                eventManager.reload(function()
+                {
+                    callback()
+                })
+            }
+            else
+            {
+                eventManager.logout()
+                callback()
+            }
+            
+        }
+
+
+        if(eventManager.editing == true)
+        {
+            let dom = page().html;
+
+            dom.querySelector("#eventName").value = eventManager.currEvent.name
+            dom.querySelector("#eventDataInizio").value = eventManager.currEvent.dateStart
+            dom.querySelector("#eventDataFine").value = eventManager.currEvent.dateEnd
+            dom.querySelector("#eventDesc").value = eventManager.currEvent.desc
+
+            dom.querySelector("#saveBtn").innerHTML = "Modifica Evento"
+            dom.querySelector("#saveBtn").onclick = function(){page().editEvent()}
+        }
+    </script>
+
+
+</div>
+</template>
+

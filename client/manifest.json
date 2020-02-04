@@ -1,0 +1,22 @@
+{
+    "short_name": "Event Manager",
+    "name": "Event Manager",
+    "start_url": "/index.html",
+    "display": "fullscreen",
+    "orientation": "any", 
+    "theme_color": "#4586ef",
+    "background_color" :"#4586ef",
+    "icons": [
+      {
+        "src": "/res/icon_192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/res/icon_512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+
+  }
