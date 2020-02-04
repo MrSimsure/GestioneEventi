@@ -45,7 +45,7 @@
                 desc        :   dom.querySelector("#eventDesc").value,
             }
 
-            comunicationManager.httpPost("eventCreate", obj, function(ret)
+            httpPost("eventCreate", obj, function(ret)
             {
                 pageBackReload()
             })
@@ -64,19 +64,19 @@
                 desc        :   dom.querySelector("#eventDesc").value,
             }
 
-            comunicationManager.httpPost("eventEdit", obj, function(ret)
+            httpPost("eventEdit", obj, function(ret)
             {
                 pageBackReload()
             })
         }
-        
+
 
         me.onBack = function(callback)
         {
             if(eventManager.editing == true)
             {
                 eventManager.editing = false;    
-                $("#listaEventi").empty()
+                
                 eventManager.reload(function()
                 {
                     callback()
@@ -96,8 +96,8 @@
             let dom = page().html;
 
             dom.querySelector("#eventName").value = eventManager.currEvent.name
-            dom.querySelector("#eventDataInizio").value = eventManager.currEvent.dateStart
-            dom.querySelector("#eventDataFine").value = eventManager.currEvent.dateEnd
+            dom.querySelector("#eventDataInizio").value = eventManager.currEvent.dateStart.substring(0,10)
+            dom.querySelector("#eventDataFine").value = eventManager.currEvent.dateEnd.substring(0,10)
             dom.querySelector("#eventDesc").value = eventManager.currEvent.desc
 
             dom.querySelector("#saveBtn").innerHTML = "Modifica Evento"
