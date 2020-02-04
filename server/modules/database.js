@@ -289,3 +289,55 @@ database.categoryDelete = function(categoryID)
     });
 }
 
+database.addUser = function(ID, eventID, categoryID, name){
+
+
+    sql = "INSERT INTO users(id,event,category,name) VALUES ("+ID+","+eventID+","+categoryID+",'"+name+"');";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) {console.log("Impossibile inserire utente" + err); return;}
+        else{
+            return;
+        }
+    });
+}
+
+
+database.sendMessage = function(ID, message, receiver, type){  //type 1:persona 2:categoria 3:broadcast
+    sql = "INSERT INTO communications(id,event,category,message,receiver,type VALUES ("+ID+",'"+message+"',"+receiver+","+type+");"
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) {console.log("impossibile inviare messaggio" + err); return;}
+        else{
+            return;
+
+        }
+    });
+}
+
+
+database.getMemberCategory = function(ID){
+    sql = "SELECT * FROM users WHERE category like "+ID+";";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result){
+        if(err) {console.log("Impossibile individuare categoria" + err); return;}
+        else{
+            return result[0].category;
+        }
+    });
+}
+
+database.getMessage = function(ID, categoryID, eventID){
+    sql = "SELECT * FROM messages WHERE (ID like "+ID+" AND type like '1') OR (category like "+categoryID+" AND type like '2') OR (eventID like "+eventID+" AND type like '3';"
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result){
+        if(err) {console.log("Impossibile trovare messaggi" + err); return;}
+        else{
+            return result;
+        }
+    });
+}
