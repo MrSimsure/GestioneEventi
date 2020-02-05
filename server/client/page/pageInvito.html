@@ -1,0 +1,41 @@
+
+<template id="pageInvitoTemplate">
+    <div id="pageInvito" class="page">
+        
+    
+            <div class="text-center mt-5">
+                <a>Hai accettato l'invito a partecipare a l'evento </a>
+                <a id="event"></a>
+                <a> all'interno della categoria </a>
+                <a id="categ"></a>
+            </div>
+            
+            <br>
+            <button class="btn btn-info btn-block" onclick="pageNew('pageHome',true,false)">Torna alla home</button>
+
+            <script>
+                let me = page()
+    
+                let obj = 
+                {
+                    id : firebase.auth().currentUser.uid,
+                    evento : invito.evento,
+                    categoria : invito.categoria,
+                    nome : ""
+                }
+
+                httpPost("accetta", obj, function()
+                {
+
+                })
+
+                if(invito != null)
+                {
+                    me.html.querySelector("#event").innerHTML = invito.evento;
+                    me.html.querySelector("#categ").innerHTML = invito.categoria;
+                }
+ 
+            </script>
+    </div> 
+    </template>
+        

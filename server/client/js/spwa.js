@@ -17,7 +17,8 @@ var pages =
     pageSignup : "pageSignup",                      //campi di registrazione
     pageHome: "pageHome",                           //lista degli eventi
     pageEvent : "pageEvent",                        //lista delle categorie
-    pageCategory : "pageCategory"                   //invitati alla categoria
+    pageCategory : "pageCategory",                   //invitati alla categoria
+    pageInvito   : "pageInvito"
 }
 
 

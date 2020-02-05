@@ -12,7 +12,7 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var methodOverride = require('method-override')
 var cors = require('cors');
-
+var fs  = require('fs');
 
 
 var app = express();
@@ -21,8 +21,12 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use("/client", express.static(__dirname + "/client"));
 
 
+app.get("/", function(req, res)  {  res.sendFile(__dirname + "/client/index.html");});   
+
+/////////////////////////////////////////////////////////////////////////UTENTI
 
 //RICEVI ID UTENTE
 app.post('/userID', function(req, res)
@@ -30,7 +34,39 @@ app.post('/userID', function(req, res)
     console.log(req.body.id)
 });
 
+//GESTISCI ACCETTAZIONE INVITI
+app.get('/invito', function(req, res)
+{
+    let evento = req.query.evento
+    let categoria = req.query.categoria
 
+    let data = fs.readFileSync(__dirname + '/client/index.html', "utf8");
+    if(data)
+        res.send(data.replace('window.invito = null','window.invito = {"evento":"'+evento+'","categoria":"'+categoria+'"}'));
+});
+
+
+app.post('/accetta', function(req, res)
+{
+    let response = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
+
+    res.send(
+    {
+        error : response
+    });
+});
+
+app.post('/notificheGet', function(req, res)
+{
+    let response = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
+
+    res.send(
+    {
+        error : response
+    });
+});
+
+/////////////////////////////////////////////////////////////////////////EVENTI
 
 //RICEVI NUOVO EVENTO
 app.post('/eventCreate', function(req, res)
@@ -65,7 +101,7 @@ app.post('/eventEdit', function(req, res)
     });
 });
 
-//RICEVI NUOVO EVENTO
+//OTTIENI LISTA EVENTI DATO IL LORO CREATORE
 app.post('/eventList', function(req, res)
 {
     console.log("Get Events")
@@ -80,7 +116,7 @@ app.post('/eventList', function(req, res)
 
 });
 
-//RICEVI NUOVO EVENTO
+//OTTIENI EVENTO DATO IL SUO ID
 app.post('/eventGet', function(req, res)
 {
     console.log("Get Events For = "+req.body.eventID)
@@ -98,23 +134,7 @@ app.post('/eventGet', function(req, res)
 
 });
 
-//RICEVI NUOVO EVENTO
-app.post('/eventGetCreator', function(req, res)
-{
-    console.log("Get Creator Of ="+req.body.id)
-
-    database.eventGetUser(req.body.id, function(RESULT)
-    {
-            res.send(
-            {
-                user : RESULT
-            });
-    })
-
-});
-
-
-
+/////////////////////////////////////////////////////////////////////////CATEGORIE
 
 //RICEVI RICHIESTA DI CREARE UNA NUOVA CATEGORIA
 app.post('/categoryCreate', function(req, res)

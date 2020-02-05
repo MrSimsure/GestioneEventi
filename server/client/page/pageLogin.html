@@ -29,7 +29,14 @@
             {
                 firebase.auth().signInWithEmailAndPassword(me.email.value, me.password.value).then(function(user)
                 {
-                    window.pageNew("pageHome",true, false)
+                    if(invito != null)
+                    {
+                        window.pageNew("pageInvito",false, false)
+                    }
+                    else
+                    {
+                        window.pageNew("pageHome",true, false)
+                    }
                 }).catch(error => 
                 {
                     console.error(error);

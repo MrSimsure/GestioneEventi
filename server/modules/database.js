@@ -21,15 +21,17 @@ database.con = database.mysql.createConnection({
 });
 */
 
-database.checkConnection = function(){
-            database.con.connect(function(err) {
-                if (err) {console.log("DB non accessibile"); return;}
-                else console.verbose("Accesso al DB riuscito");
-            });
+database.checkConnection = function()
+{
+        database.con.connect(function(err) 
+        {
+            if (err) {console.log("DB non accessibile"); return;}
+            else console.verbose("Accesso al DB riuscito");
+        });
 }
 
 
-
+/////////////////////////////////////////////////////////////////////////EVENTI
 
 //CREA UN NUOVO EVENTO
 database.eventCreate = function(creatorID,name,dateStart,dateEnd)
@@ -68,7 +70,7 @@ database.eventCreate = function(creatorID,name,dateStart,dateEnd)
             }});
 }
                     
-//TROVA L'UTENTE A CUI APPARTIENE UN EVENTO
+//TORNA IL CREATORE DI UN EVENTO DATO IL SUO ID
 database.eventGetUser = function(eventID, callback)
 {
         sql = "SELECT creator FROM varnellidb.events WHERE id = "+eventID+";"
@@ -86,7 +88,7 @@ database.eventGetUser = function(eventID, callback)
         });
 }
 
-//PRENDI INFO SU UN EVENTO DATO IL SUO ID
+//TROVA UN EVENTO DATO IL SUO ID
 database.eventGetById = function(eventID, callback)
 {
         sql = "SELECT * FROM varnellidb.events WHERE id = '"+eventID+"';";
@@ -104,7 +106,7 @@ database.eventGetById = function(eventID, callback)
         });
 }
 
-
+//TROVA UN EVENTO DATO L'ID DEL SUO CREATORE
 database.eventGetByCreator = function(eventID, callback)
 {
         sql = "SELECT * FROM varnellidb.events WHERE creator = '"+eventID+"';";
@@ -122,7 +124,7 @@ database.eventGetByCreator = function(eventID, callback)
         });
 }
 
-//PRENDI INFO SU UN EVENTO DATO IL SUO ID
+//TORNA LE INFO DI UNA CATEGORIA DATO IL SUO ID
 database.categoryGet = function(categoryID, callback)
 {
         sql = "SELECT * FROM varnellidb.category WHERE id = "+categoryID+";";
@@ -140,7 +142,7 @@ database.categoryGet = function(categoryID, callback)
         });
 }
 
-//OTTIENI LA LISTA CONE LE INFO DI OGNI EVENTO DATO L'ID DI UN UTENTE
+//TROVA TUTTI GLI EVENTI DATO L'ID DI UN UTENTE
 database.eventList = function(userID, callback)
 {
         sql = "SELECT * FROM varnellidb.events WHERE creator = '"+userID+"';";
@@ -174,6 +176,7 @@ database.eventEdit = function(eventID,name,dateStart,dateEnd){
     });
 }
 
+//ELIMINA UN EVENTO
 database.eventDelete = function(eventID){
 
     sql = "DELETE FROM events WHERE id = '"+eventID+"'";
@@ -189,6 +192,7 @@ database.eventDelete = function(eventID){
     });
 }
 
+/////////////////////////////////////////////////////////////////////////CATEGORIE
 
 //CREA UNA NUOVA CATEGORIA
 database.categoryCreate = function(eventID,name)
@@ -220,7 +224,7 @@ database.categoryCreate = function(eventID,name)
     });
 }
 
-//OTTIENI LA LISTA CONE LE INFO DI OGNI CATEGORIA DATO L'ID DI UN EVENTO
+//TROVA TUTTE LE CATEGORIE DATO L'ID DI UN EVENTO
 database.categoryList = function(eventID,callback)
 {
         sql = "SELECT * FROM varnellidb.category WHERE event = "+eventID+";";
@@ -273,6 +277,7 @@ database.categoryEdit = function(categoryID,name){
     });
 }
 
+//ELIMINA UNA CATEGORIA
 database.categoryDelete = function(categoryID)
 {
 
@@ -289,10 +294,12 @@ database.categoryDelete = function(categoryID)
     });
 }
 
-database.addUser = function(ID, eventID, categoryID, name){
+/////////////////////////////////////////////////////////////////////////UTENTI
 
-
-    sql = "INSERT INTO users(id,event,category,name) VALUES ("+ID+","+eventID+","+categoryID+",'"+name+"');";
+//AGGIUNIG UN NUOVO UTENTE
+database.addUser = function(ID, eventID, categoryID, name)
+{
+    sql = "INSERT INTO users(id,event,category,name) VALUES ('"+ID+"',"+eventID+","+categoryID+",'"+name+"');";
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err){
@@ -304,7 +311,25 @@ database.addUser = function(ID, eventID, categoryID, name){
 }
 
 
-database.sendMessage = function(ID, message, receiver, type){  //type 1:persona 2:categoria 3:broadcast
+//TROVA TUTTI GLI UTENTI CHE APPARTENGONO AD UNA CERTA CATEGORIA DATO L'ID DI QUESTA
+database.getMemberCategory = function(ID)
+{
+    sql = "SELECT * FROM users WHERE category like "+ID+";";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result){
+        if(err) {console.log("Impossibile individuare categoria" + err); return;}
+        else{
+            return result[0].category;
+        }
+    });
+}
+
+
+/////////////////////////////////////////////////////////////////////////MESSAGGI
+
+database.sendMessage = function(ID, message, receiver, type)//type 1:persona 2:categoria 3:broadcast
+{  
     sql = "INSERT INTO communications(id,event,category,message,receiver,type VALUES ("+ID+",'"+message+"',"+receiver+","+type+");"
     console.verbose("Stringa inviata: " + sql);
 
@@ -318,19 +343,10 @@ database.sendMessage = function(ID, message, receiver, type){  //type 1:persona 
 }
 
 
-database.getMemberCategory = function(ID){
-    sql = "SELECT * FROM users WHERE category like "+ID+";";
-    console.verbose("Stringa inviata: " + sql);
 
-    database.con.query(sql, function (err, result){
-        if(err) {console.log("Impossibile individuare categoria" + err); return;}
-        else{
-            return result[0].category;
-        }
-    });
-}
-
-database.getMessage = function(ID, categoryID, eventID){
+//RITORNA TUTTI I MESSAGGI DI UN UTENTE DATO IL SUO ID CATEGORIA ED EVENTO
+database.getMessage = function(ID, categoryID, eventID)
+{
     sql = "SELECT * FROM messages WHERE (ID like "+ID+" AND type like '1') OR (category like "+categoryID+" AND type like '2') OR (eventID like "+eventID+" AND type like '3';"
     console.verbose("Stringa inviata: " + sql);
 
