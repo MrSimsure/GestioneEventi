@@ -26,7 +26,7 @@ class EventManager
     }
 
 
-    newEvent(ev)
+    creaEvento(ev)
     {
         let newEv = new Evento(ev.id, ev.name, ev.creator, ev.dateStart, ev.dateEnd, ev.description);
         this.eventList.push(newEv); 

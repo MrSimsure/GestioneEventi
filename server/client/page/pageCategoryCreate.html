@@ -1,6 +1,89 @@
 <!doctype html>
 
-<template>
+<template id="pageCategoryCreateTemplate">
+<div id="pageCategoryCreate" class="page">
+
+    <div>
+        <div class="form-group">
+            <label for="categoryName">Nome Cateogria</label>
+            <input type="text" class="form-control" id="categoryName" placeholder="nome categoria">
+        </div>
+
+        <br><br>
+        <button id="saveBtn" onclick="page().saveCategory()" class="btn btn-primary btn-block">Salva Nuova Categoria</button>
+
+    </div>
+
+    <script>
+        let me = page();
+        
+        me.saveCategory = function()
+        {
+            let dom = page().html;
+
+            let obj = 
+            {
+                categoryID     :   eventManager.currEvent.currCategory.id,
+                name        :   dom.querySelector("#categoryName").value,
+            }
+
+            httpPost("categoryCreate", obj, function(ret)
+            {
+                pageBackReload()
+            })
+        }
+
+        me.editCategory = function()
+        {
+            let dom = page().html;
+
+            let obj = 
+            {
+                categoryID     :   eventManager.currEvent.currCategory.id,
+                name        :   dom.querySelector("#categoryName").value,
+            }
+
+            httpPost("categoryEdit", obj, function(ret)
+            {
+                pageBackReload()
+            })
+        }
 
 
+        me.onBack = function(callback)
+        {
+            if(eventManager.editing == true)
+            {
+                eventManager.editing = false;    
+                
+                eventManager.currEvent.reload(function()
+                {
+                    callback()
+                })
+            }
+            else
+            {
+                eventManager.currEvent.reload(function()
+                {
+                    callback()
+                })
+            }
+            
+        }
+
+
+        if(eventManager.editing == true)
+        {
+            let dom = page().html;
+
+            dom.querySelector("#categoryName").value = eventManager.currEvent.currCategory.name
+
+            dom.querySelector("#saveBtn").innerHTML = "Modifica Categoria"
+            dom.querySelector("#saveBtn").onclick = function(){page().editCategory()}
+        }
+    </script>
+
+
+</div>
 </template>
+

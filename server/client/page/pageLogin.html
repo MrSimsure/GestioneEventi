@@ -29,14 +29,21 @@
             {
                 firebase.auth().signInWithEmailAndPassword(me.email.value, me.password.value).then(function(user)
                 {
-                    if(invito != null)
+                    
+                    httpPost("getUserName", {id:firebase.auth().currentUser.uid}, function(ret)
                     {
-                        window.pageNew("pageInvito",false, false)
-                    }
-                    else
-                    {
-                        window.pageNew("pageHome",true, false)
-                    }
+                        window.profilo = new Profilo(ret.name);
+
+                        if(invito != null)
+                        {
+                            window.pageNew("pageInvito",false, false)
+                        }
+                        else
+                        {
+                            window.pageNew("pageHome",true, false)
+                        }
+                    })
+                    
                 }).catch(error => 
                 {
                     console.error(error);

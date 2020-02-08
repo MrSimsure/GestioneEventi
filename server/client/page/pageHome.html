@@ -40,7 +40,7 @@
             {
                 for(let i=0; i<list.length; i++)
                 {
-                    eventManager.newEvent(list[i])
+                    eventManager.creaEvento(list[i])
                     
                     let btn = compNew("#listaEventi", "eventButton");
                     btn.setAttribute("data-evento", i)
@@ -72,6 +72,9 @@
         }
 
         me.loadEventi()
+
+        
+
     </script>
 
 

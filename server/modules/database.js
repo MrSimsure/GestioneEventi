@@ -91,25 +91,29 @@ database.eventGetUser = function(eventID, callback)
 //TROVA UN EVENTO DATO IL SUO ID
 database.eventGetById = function(eventID, callback)
 {
-        sql = "SELECT * FROM varnellidb.events WHERE id = '"+eventID+"';";
-        console.verbose("Stringa inviata: " + sql);
-
-        database.con.query(sql, function (err, result) 
+        let sql = "SELECT * FROM varnellidb.events";
+        if(Array.isArray(eventID) == true )
         {
-            if (err) {console.log("Nessun evento trovato\n"+err); return;}
-            else 
+            sql += " WHERE id = "
+            for(let i=0; i<eventID.length; i++)
             {
-                console.log("Result: " + result); 
-                callback(result[0])
-                return result;
-            }
-        });
-}
-
-//TROVA UN EVENTO DATO L'ID DEL SUO CREATORE
-database.eventGetByCreator = function(eventID, callback)
-{
-        sql = "SELECT * FROM varnellidb.events WHERE creator = '"+eventID+"';";
+                sql += "'"+eventID[i]+"'";
+                if(i != eventID.length-1)
+                {
+                    sql += "or id ="
+                }
+                else
+                {
+                    sql +=";"
+                }
+            }  
+            console.log(sql)
+        }
+        else
+        {
+            sql = "SELECT * FROM varnellidb.events WHERE id = '"+eventID+"';";
+        }
+        
         console.verbose("Stringa inviata: " + sql);
 
         database.con.query(sql, function (err, result) 
@@ -120,6 +124,50 @@ database.eventGetByCreator = function(eventID, callback)
                 console.log("Result: " + result); 
                 callback(result)
                 return result;
+            }
+        });
+}
+
+//TROVA UN EVENTO DATO L'ID DEL SUO CREATORE
+database.eventGetByCreator = function(userID, callback)
+{
+        sql = "SELECT * FROM varnellidb.events WHERE creator = '"+userID+"';";
+        console.verbose("Stringa inviata: " + sql);
+        let eventList = [];
+
+        database.con.query(sql, function (err, result) 
+        {
+            if (err) {console.log("Nessun evento trovato\n"+err); return;}
+            else 
+            {
+                callback(result)
+                return result; 
+            }
+        });
+}
+
+//TROVA UN EVENTO DATO L'ID DEL SUO CREATORE
+database.eventGetByPartecipant = function(userID, callback)
+{
+        sql = "SELECT * FROM varnellidb.users WHERE id = '"+userID+"'  and invite is null;";
+        console.verbose("Stringa inviata: " + sql);
+
+        database.con.query(sql, function (err, result) 
+        {
+            if (err) {console.log("Nessun evento trovato\n"+err); return;}
+            else 
+            {
+                let listaId = [];
+                for(let i=0; i<result.length; i++)
+                {
+                    listaId.push(result[i].event)
+                }
+
+                database.eventGetById(listaId, function(result2)
+                {
+                    callback(result2)
+                })
+                
             }
         });
 }
@@ -139,24 +187,6 @@ database.categoryGet = function(categoryID, callback)
                 callback(result)
                 return result;
             }
-        });
-}
-
-//TROVA TUTTI GLI EVENTI DATO L'ID DI UN UTENTE
-database.eventList = function(userID, callback)
-{
-        sql = "SELECT * FROM varnellidb.events WHERE creator = '"+userID+"';";
-        console.verbose("Stringa inviata: " + sql);
-
-        database.con.query(sql, function (err, result) 
-        {
-            if (err) {console.log("Nessun evento registrato\n"+err); return;}
-            else 
-            {  
-                callback(result)
-                return;
-            }
-
         });
 }
 
@@ -297,9 +327,9 @@ database.categoryDelete = function(categoryID)
 /////////////////////////////////////////////////////////////////////////UTENTI
 
 //AGGIUNIG UN NUOVO UTENTE
-database.addUser = function(ID, eventID, categoryID, name)
+database.addProfile = function(ID, name)
 {
-    sql = "INSERT INTO users(id,event,category,name) VALUES ('"+ID+"',"+eventID+","+categoryID+",'"+name+"');";
+    sql = "INSERT INTO profiles(id, name) VALUES ('"+ID+"'"+",'"+name+"');";
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err){
@@ -310,6 +340,49 @@ database.addUser = function(ID, eventID, categoryID, name)
     });
 }
 
+//AGGIUNIG UN NUOVO UTENTE
+database.addUser = function(ID, name)
+{
+    sql = "INSERT INTO users(id, name) VALUES ('"+ID+"'"+",'"+name+"');";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) {console.log("Impossibile inserire utente" + err); return;}
+        else{
+            return;
+        }
+    });
+}
+
+//
+database.getUser = function(ID, callback)
+{
+    sql = "SELECT name FROM varnellidb.profiles WHERE id = '"+ID+"'";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err,result){
+        if(err) {console.log("Impossibile trovare utente" + err); return;}
+        else{
+            console.log(result)
+            callback(result[0].name)
+        }
+    });
+}
+
+//
+database.updateUser = function(ID, name, category, event , invite)
+{ 
+    
+    sql = "UPDATE `users` SET `name`='"+name+"', `category`="+category+", `event`="+event+", `invite`='"+invite+"' WHERE id = '"+ID+"';";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) {console.log("Impossibile aggiornare utente" + err); return;}
+        else{
+            return;
+        }
+    });
+}
 
 //TROVA TUTTI GLI UTENTI CHE APPARTENGONO AD UNA CERTA CATEGORIA DATO L'ID DI QUESTA
 database.getMemberCategory = function(ID)

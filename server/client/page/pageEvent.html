@@ -8,7 +8,7 @@
     <div class="dropdown btn-center-cont">
         <button class="btn btn-primary btn-block dropdown-toggle btn-center" type="button" data-toggle="dropdown" >Menu Evento</button>
         <div class="dropdown-menu left-15" >
-            <button type="button" class="btn btn-primary btn-block m-1">Crea Nuova Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1" onclick="pageNew('pageCategoryCreate')">Crea Nuova Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1" 
                 onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
             <button type="button" class="btn btn-primary btn-block m-1" onclick="page().deleteEvent()">Elimina Evento</button>
@@ -45,7 +45,7 @@
         }
 
 
-        me.loadCategorie = function()
+        me.loadCategorie = function(callback)
         {
             eventManager.currEvent.getCategories(function(list)
             {
@@ -56,6 +56,9 @@
                     btn.setAttribute("data-categoria", i)
                     btn.querySelector("a").innerHTML = list[i].name
                 }
+
+                if(callback != undefined)
+                    callback()
             })          
         }
 

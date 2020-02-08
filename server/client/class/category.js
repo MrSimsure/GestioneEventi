@@ -4,7 +4,7 @@ class Categoria
     {
         this.id = id;
         this.name = name;
-        this.evento = creator;
+        this.evento = evento;
     }
 
 

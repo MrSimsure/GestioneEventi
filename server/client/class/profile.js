@@ -1,7 +1,7 @@
 class Profilo
 {
-    constructor()
+    constructor(name)
     {
-        this.name = "";
+        this.name = name;
     }
 }

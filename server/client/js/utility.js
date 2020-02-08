@@ -5,15 +5,21 @@ function loginFast()
 {
     firebase.auth().signInWithEmailAndPassword("benigni_simone@libero.it", "123456").then(function(user)
     {
-        if(invito != null)
+        httpPost("getUserName", {id:firebase.auth().currentUser.uid}, function(ret)
         {
-            window.pageNew("pageInvito",false, false)
-        }
-        else
-        {
-            window.pageNew("pageHome",false, false)
-        }
-        return
+            window.profilo = new Profilo(ret.name);
+
+            if(window.invito != null)
+            {
+                window.pageNew("pageInvito",false, false)
+            }
+            else
+            {
+                window.pageNew("pageHome",false, false)
+            }
+
+            return
+        })
         
     }).catch(error => 
     {

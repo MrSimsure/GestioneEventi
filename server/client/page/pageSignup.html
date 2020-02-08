@@ -39,14 +39,27 @@
                 {
                     firebase.auth().signInWithEmailAndPassword(me.email.value, me.password.value).then(function(user)
                     {
-                        if(invito != null)
+                        window.profilo = new Profilo(me.name.value);
+
+                        let obj = 
                         {
-                            window.pageNew("pageInvito",false, false)
+                            id : firebase.auth().currentUser.uid,
+                            name : me.name.value,
                         }
-                        else
+
+                        httpPost("newUser", obj, function()
                         {
-                            window.pageNew("pageHome",true, false)
-                        }
+                            if(invito != null)
+                            {
+                                window.pageNew("pageInvito",false, false)
+                            }
+                            else
+                            {
+                                window.pageNew("pageHome",true, false)
+                            }
+                        })
+
+                        
                     }).catch(error => 
                     {
                         console.error(error);

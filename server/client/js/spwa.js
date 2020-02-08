@@ -112,7 +112,7 @@ function pageNew(name, del, back)
     let clon = temp.content.firstElementChild.cloneNode(true);
     let pageNew = document.querySelector("body").appendChild(clon);
 
-    //elimina o no al pagian che stai lasciando
+    //elimina o no la pagina che stai lasciando
     if(del != undefined && del == true)
     {
         pageQueue[pageQueue.length-1].delete();
@@ -152,7 +152,7 @@ function pageNew(name, del, back)
 }
 
 
-function backAction()
+function backAction(callback)
 {
     pageQueue[pageQueue.length-1].delete();
     pageQueue.remove(pageQueue.length-1);
@@ -165,40 +165,56 @@ function backAction()
 
     if(pageQueue.length == 1)
         htmlHide(btnBack)   
+
+    if(callback != undefined)
+        callback()
 }
 
 
 /**
  * torna alla pagina precedente
  */
-function pageBack()
+function pageBack(callback)
 {
     if(page().onBack != undefined) 
     {
         page().onBack(function()
         {
-            backAction() 
+            backAction(function()
+            {
+                if(callback != undefined)
+                    callback()
+            }) 
         })
     }
     else
     {
-        backAction()
+        backAction(function()
+        {
+            if(callback != undefined)
+                callback()
+        }) 
     }
 
     
 }
 
 /**
- * torna alla pagina precedente
+ * torna alla pagina precedente ricaricandola
  */
 function pageBackReload()
 {
-    pageBack()
+    pageBack(function()
+    {  
+        let curr = pageCurrent
 
-    pageQueue[pageQueue.length-1].delete();
-    pageQueue.remove(pageQueue.length-1);
-
-    pageNew(pageCurrent)      
+        pageQueue[pageQueue.length-1].delete();
+        pageQueue.remove(pageQueue.length-1);
+    
+        pageNew(pageCurrent) 
+    })
+    
+        
 }
 
 

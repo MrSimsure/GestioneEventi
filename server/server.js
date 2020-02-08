@@ -34,21 +34,47 @@ app.post('/userID', function(req, res)
     console.log(req.body.id)
 });
 
-//GESTISCI ACCETTAZIONE INVITI
+//RICEVI ID UTENTE
+app.post('/getUserName', function(req, res)
+{
+    database.getUser(req.body.id, function(result)
+    {
+        res.send({
+            name:result
+        });
+    })
+
+    
+});
+
+//QUANDO UN UTENTE SELEZIONA UN LINK DI INVITO MANDAGLI LA PAGINA SPECIALE
 app.get('/invito', function(req, res)
 {
     let evento = req.query.evento
     let categoria = req.query.categoria
+    let mittente = req.query.mittente
 
     let data = fs.readFileSync(__dirname + '/client/index.html', "utf8");
     if(data)
-        res.send(data.replace('window.invito = null','window.invito = {"evento":"'+evento+'","categoria":"'+categoria+'"}'));
+        res.send(data.replace('window.invito = null','window.invito = {"evento":"'+evento+'","categoria":"'+categoria+'","mittente":"'+mittente+'"}'));
+});
+
+//QUANDO LA PAGINA SPECIALE DI INVITO VIENE APERTA E IL LOGIN EFFETTUATO MANDA AL SERVER LA RICHIESTA DI ACCETTAZIONE
+app.post('/segna', function(req, res)
+{
+    let respUser = database.updateUser(req.body.id, req.body.name, req.body.event, req.body.category, req.body.invite)
+
+    res.send(
+    {
+        error : respUser
+    });
 });
 
 
 app.post('/accetta', function(req, res)
 {
-    let response = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
+    let respUser = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
+    let respMess = database.sendMessage(ID, message, receiver, type)
 
     res.send(
     {
@@ -63,6 +89,30 @@ app.post('/notificheGet', function(req, res)
     res.send(
     {
         error : response
+    });
+});
+
+
+app.post('/sendMessage', function(req, res)
+{
+    let response = database.addUser(req.body.id, req.body.messaggio, req.body.ricevitore, req.body.tipo)
+
+    res.send(
+    {
+        error : response
+    });
+});
+
+
+app.post('/newUser', function(req, res)
+{
+    let response1 = database.addUser(req.body.id, req.body.name)
+    let response2 = database.addProfile(req.body.id, req.body.name)
+
+    res.send(
+    {
+        error1 : response1,
+        error2 : response2
     });
 });
 
@@ -105,15 +155,28 @@ app.post('/eventEdit', function(req, res)
 app.post('/eventList', function(req, res)
 {
     console.log("Get Events")
-
+    let lista = [];
+    
     database.eventGetByCreator(req.body.id, function(RESULT)
     {
-        res.send(
+        for(let i=0; i<RESULT.length; i++)
         {
-            eventList : RESULT
-        });
-    })
+            lista.push(RESULT[i])
+        }
 
+        database.eventGetByPartecipant(req.body.id, function(RESULT2)
+        {
+            for(let i=0; i<RESULT2.length; i++)
+            {
+                lista.push(RESULT2[i])
+            }
+
+            res.send(
+            {
+                eventList : lista
+            });
+        })
+    })
 });
 
 //OTTIENI EVENTO DATO IL SUO ID

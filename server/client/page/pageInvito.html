@@ -16,23 +16,21 @@
             <script>
                 let me = page()
     
-                let obj = 
-                {
-                    id : firebase.auth().currentUser.uid,
-                    evento : invito.evento,
-                    categoria : invito.categoria,
-                    nome : ""
-                }
-
-                httpPost("accetta", obj, function()
-                {
-
-                })
-
                 if(invito != null)
                 {
-                    me.html.querySelector("#event").innerHTML = invito.evento;
-                    me.html.querySelector("#categ").innerHTML = invito.categoria;
+                    let obj =
+                    {
+                        id          : firebase.auth().currentUser.uid,
+                        name        : profilo.name,
+                        event       : invito.evento,
+                        category    : invito.categoria,
+                        invite      : invito.mittente,
+                    }
+
+                    httpPost("segna",obj,function()
+                    {
+                        
+                    })
                 }
  
             </script>

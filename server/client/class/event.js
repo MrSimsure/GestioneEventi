@@ -37,7 +37,7 @@ class Evento
     }
 
     selectCategory(id)
-    {console.log(id)
+    {
         this.currCategoryId = parseInt(id);
         this.currCategory = this.categoryList[this.currCategoryId]
         pageNew("pageCategory")
@@ -47,5 +47,17 @@ class Evento
     {
         eventManager.currEventId = -1;
         eventManager.currEvent = null;
+    }
+
+    reload(callback)
+    {
+        $("#listaCategorie").empty()
+        this.categoryList = [];
+        this.currCategory = null;
+        pageGet("pageEvent").loadCategorie(function()
+        {
+            eventManager.currEvent.currCategory = eventManager.currEvent.categoryList[eventManager.currEvent.currCategoryId];
+            callback()
+        })
     }
 }
