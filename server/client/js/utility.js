@@ -7,7 +7,7 @@ function loginFast()
     {
         httpPost("getUserName", {id:firebase.auth().currentUser.uid}, function(ret)
         {
-            window.profilo = new Profilo(ret.name);
+            window.profilo = new Profilo(ret.name, firebase.auth().currentUser.uid);
 
             if(window.invito != null)
             {

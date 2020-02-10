@@ -8,7 +8,7 @@
     <div class="dropdown btn-center-cont">
         <button class="btn btn-primary btn-block dropdown-toggle btn-center" type="button" data-toggle="dropdown" >Menu Categoria</button>
         <div class="dropdown-menu left-15" >
-            <button type="button" class="btn btn-primary btn-block m-1">Genera Invito</button>
+            <button type="button" class="btn btn-primary btn-block m-1" onclick="page().invito()">Genera Invito</button>
             <button type="button" class="btn btn-primary btn-block m-1"
             onclick="eventManager.editing = true; pageNew('pageCategoryCreate')">Modifica Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1">Elimina Categoria</button>
@@ -38,6 +38,14 @@
                 }
             })          
         }
+
+        me.invito = function()
+        {
+            let btn = compNew("body", "codiceInvito");
+            btn.querySelector("#codice").innerHTML = "http://localhost:8200/invito?evento="+eventManager.currEvent.id+"&categoria="+eventManager.currEvent.currCategory.id+"&mittente="+profilo.id;
+            $('#codiceInvito').modal('show');
+        }
+
 
         me.onBack = function(callback)
         {

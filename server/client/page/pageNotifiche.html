@@ -1,0 +1,43 @@
+<!doctype html>
+
+<template id="pageNotificheTemplate">
+<div id="pageNotifiche" class="page">
+
+    <h1 id="title" class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+
+    <ul class="list-group" id="listaNotifiche">
+
+    </ul>
+
+
+    <script>
+        let me = page();
+        
+        me.loadNotifiche = function()
+        {
+            comunicationManager.loadNotifiche(function(list)
+            {
+                console.log(list)
+                for(let i=0; i<list.notifiche.length; i++)
+                {
+                    let curr = list.notifiche[i]
+                    let btn = compNew("#listaNotifiche", "notificaInvito");
+                    btn.querySelector("#text").innerHTML = "L'utente "+curr.name+", vuole unirsi alla categoria "+curr.category+" dell'evento "+curr.event
+                }
+                
+            })          
+        }
+
+        me.onBack = function(callback)
+        {
+            callback()
+        }
+
+        me.loadNotifiche()
+    </script>
+
+
+</div>
+</template>
+

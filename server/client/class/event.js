@@ -12,22 +12,47 @@ class Evento
         this.categoryList = [];
         this.currCategoryId = -1;
         this.currCategory = null;
+
+        this.configuratore = false;
+        this.organizzatore = false;
+        
+        if(this.creator == profilo.id)
+        {
+            this.configuratore = true;
+        }
     }
 
 
     getCategories(callback)
     {
-        let obj = 
+        if(this.configuratore == true)
         {
-            id : this.id
+            let obj = 
+            {
+                eventID : this.id
+            }
+            httpPost("categoryList", obj, function(ret)
+            {
+                let catList = ret.categoryList;
+                callback(catList)         
+                console.log(catList)
+            })
         }
-
-        httpPost("categoryList", obj, function(ret)
+        else
         {
-            let catList = ret.categoryList;
-            callback(catList)         
-            console.log(catList)
-        })
+            let obj = 
+            {
+                eventID : this.id,
+                userID  : profilo.id
+            }
+            httpPost("categoryMyList", obj, function(ret)
+            {
+                let catList = ret.categoryList;
+                callback(catList)         
+                console.log(catList)
+            })
+        }
+        
     }
 
     newCategory(ct)

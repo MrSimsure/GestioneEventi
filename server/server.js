@@ -62,7 +62,7 @@ app.get('/invito', function(req, res)
 //QUANDO LA PAGINA SPECIALE DI INVITO VIENE APERTA E IL LOGIN EFFETTUATO MANDA AL SERVER LA RICHIESTA DI ACCETTAZIONE
 app.post('/segna', function(req, res)
 {
-    let respUser = database.updateUser(req.body.id, req.body.name, req.body.event, req.body.category, req.body.invite)
+    let respUser = database.updateUser(req.body.id, req.body.name, req.body.category, req.body.event, req.body.invite)
 
     res.send(
     {
@@ -84,12 +84,15 @@ app.post('/accetta', function(req, res)
 
 app.post('/notificheGet', function(req, res)
 {
-    let response = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
-
-    res.send(
+    database.notificheGetInvito(req.body.userID, req.body.eventID, function(ret)
     {
-        error : response
-    });
+        res.send(
+        {
+            notifiche : ret
+        });
+    })
+
+    
 });
 
 
@@ -121,8 +124,11 @@ app.post('/newUser', function(req, res)
 //RICEVI NUOVO EVENTO
 app.post('/eventCreate', function(req, res)
 {
-    let response = database.eventCreate(req.body.id, req.body.name, req.body.startDate, req.body.endDate, req.body.desc)
-
+    let response = database.eventCreate(req.body.id, req.body.name, req.body.startDate, req.body.endDate, function(eventID)
+    {
+        database.categoryCreate(eventID,"Organizzatori")
+    })
+    
     res.send(
     {
         error : response
@@ -235,9 +241,9 @@ app.post('/categoryDelete', function(req, res)
 //PRENDI LE INFORMAZIONI SU TUTTE LE CATEGORIE
 app.post('/categoryList', function(req, res)
 {
-    console.log("Get Category For ="+req.body.id)
+    console.log("Get Category For ="+req.body.eventID)
     
-    database.categoryList(req.body.id, function(RESULT)
+    database.categoryList(req.body.eventID, function(RESULT)
     {
         res.send(
         {
@@ -246,6 +252,18 @@ app.post('/categoryList', function(req, res)
     })
 });
 
+
+//PRENDI LE INFORMAZIONI SU TUTTE LE CATEGORIE
+app.post('/categoryMyList', function(req, res)
+{
+    database.categoryGetByPartecipant(req.body.eventID, req.body.userID, function(RESULT)
+    {
+        res.send(
+        {
+            categoryList : RESULT
+        });
+    })
+});
 
 app.listen(process.env.PORT || 8200);
 console.log("server started");

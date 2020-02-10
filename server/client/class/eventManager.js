@@ -14,7 +14,7 @@ class EventManager
     {
         let obj = 
         {
-            id : firebase.auth().currentUser.uid
+            id : profilo.id
         }
 
         httpPost("eventList", obj, function(ret)

@@ -39,7 +39,7 @@
                 {
                     firebase.auth().signInWithEmailAndPassword(me.email.value, me.password.value).then(function(user)
                     {
-                        window.profilo = new Profilo(me.name.value);
+                        window.profilo = new Profilo(me.name.value, firebase.auth().currentUser.uid);
 
                         let obj = 
                         {

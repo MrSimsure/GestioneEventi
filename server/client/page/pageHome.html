@@ -45,6 +45,12 @@
                     let btn = compNew("#listaEventi", "eventButton");
                     btn.setAttribute("data-evento", i)
                     btn.querySelector("a").innerHTML = list[i].name
+
+                    if(list[i].creator == profilo.id)
+                    {
+                        btn.style = "background-color:#fafab2"
+                    }
+                    
                 }
 
                 if(callback != undefined)

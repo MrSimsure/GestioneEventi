@@ -1,0 +1,25 @@
+<!doctype html>
+
+<template id="codiceInvitoTemplate">
+
+    <div class="modal modal-lg"  id="codiceInvito">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content modal-lg">
+            <div class="modal-header">
+              <h5 class="modal-title">Codice Invito alla categoria </h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p style="font-size: 2.5vw;" id="codice">Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" onclick="navigator.clipboard.writeText(document.getElementById('codice').innerHTML)">Copia</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#codiceInvito').remove()">Chiudi</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</template>

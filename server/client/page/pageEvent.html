@@ -8,13 +8,12 @@
     <div class="dropdown btn-center-cont">
         <button class="btn btn-primary btn-block dropdown-toggle btn-center" type="button" data-toggle="dropdown" >Menu Evento</button>
         <div class="dropdown-menu left-15" >
-            <button type="button" class="btn btn-primary btn-block m-1" onclick="pageNew('pageCategoryCreate')">Crea Nuova Categoria</button>
-            <button type="button" class="btn btn-primary btn-block m-1" 
-                onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
-            <button type="button" class="btn btn-primary btn-block m-1" onclick="page().deleteEvent()">Elimina Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnCategoria" onclick="pageNew('pageCategoryCreate')">Crea Nuova Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnModifica"  onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnElimina"   onclick="page().deleteEvent()">Elimina Evento</button>
             <button type="button" class="btn btn-primary btn-block m-1">Profilo</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Notifiche</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnBroadcast">Invia Broadcast</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnNotifiche" onclick="pageNew('pageNotifiche')">Notifiche</button>
         </div>
     </div>
 
@@ -27,7 +26,13 @@
 
     <script>
         let me = page();
-        
+
+        me.btnCategoria = page().html.querySelector("#btnCategoria");
+        me.btnModifica =  page().html.querySelector("#btnModifica");
+        me.btnElimina =   page().html.querySelector("#btnElimina");
+        me.btnBroadcast = page().html.querySelector("#btnBroadcast");
+        me.btnNotifiche = page().html.querySelector("#btnNotifiche");
+
         me.deleteEvent = function()
         {
             let obj =
@@ -70,6 +75,25 @@
 
         me.loadCategorie()
         me.html.querySelector("#title").innerHTML = eventManager.currEvent.name
+
+        if(eventManager.currEvent.configuratore == true)
+        {
+            
+        }else 
+        if(eventManager.currEvent.organizzatore == true)
+        {
+            htmlHide(btnCategoria);
+            htmlHide(btnModifica);
+            htmlHide(btnElimina);
+        }else
+        {
+            htmlHide(btnCategoria);
+            htmlHide(btnModifica);
+            htmlHide(btnElimina);
+            htmlHide(btnBroadcast);
+            htmlHide(btnNotifiche);
+        }
+
     </script>
 
 
