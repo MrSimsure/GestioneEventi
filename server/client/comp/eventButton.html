@@ -2,9 +2,18 @@
 
 <template id="eventButtonTemplate">
 
-    <li id="eventButton" class="list-group-item" onclick="eventManager.selectEvent(this.getAttribute('data-evento'))">
-        <a id="text"></a>
-        <button class="btn btn-info d-inline messaggio btn-center-container p-0" >
+    <li id="eventButton" class="list-group-item p-0" >
+        <div onclick="eventManager.selectEvent(this.parentElement.getAttribute('data-evento'))" style="width: 80%; padding: 0.75rem 1.25rem;" class="border">
+            <a id="text"></a>
+        </div>
+
+        <button class="btn btn-info d-inline messaggio btn-center-container p-0" 
+        onclick="
+        comunicationManager.sendType = msgType.event; 
+        comunicationManager.sendTo = eventManager.eventList[this.parentElement.getAttribute('data-evento')]
+        pageNew('pageMessage');
+        return false;
+        ">
             <i class="far fa-envelope btn-center" style="transform: translateY(-1%); font-size: 4vh;"></i>
         </button>
     </li>

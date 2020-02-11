@@ -13,16 +13,17 @@ var comps =
 
 var pages =
 {
-    pageEnter : "pageEnter",                        //entrata dell'app, login e signup (procede se gia loggato)
-    pageCategoryCreate : "pageCategoryCreate",      //creazione e modifica di una categoria
-    pageEventCreate : "pageEventCreate",            //creazione e modifica di un evento
-    pageLogin : "pageLogin",                        //campi di login
-    pageSignup : "pageSignup",                      //campi di registrazione
-    pageHome: "pageHome",                           //lista degli eventi
-    pageEvent : "pageEvent",                        //lista delle categorie
-    pageCategory : "pageCategory",                   //invitati alla categoria
-    pageInvito   : "pageInvito",
-    pageNotifiche : "pageNotifiche"
+    pageEnter           : "pageEnter",               //entrata dell'app, login e signup (procede se gia loggato)
+    pageCategoryCreate  : "pageCategoryCreate",      //creazione e modifica di una categoria
+    pageEventCreate     : "pageEventCreate",         //creazione e modifica di un evento
+    pageLogin           : "pageLogin",               //campi di login
+    pageSignup          : "pageSignup",              //campi di registrazione
+    pageHome            : "pageHome",                //lista degli eventi
+    pageEvent           : "pageEvent",               //lista delle categorie
+    pageCategory        : "pageCategory",            //invitati alla categoria
+    pageInvito          : "pageInvito",
+    pageNotifiche       : "pageNotifiche",
+    pageMessage         : "pageMessage"
 }
 
 

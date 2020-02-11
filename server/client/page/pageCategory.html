@@ -11,7 +11,7 @@
             <button type="button" class="btn btn-primary btn-block m-1" onclick="page().invito()">Genera Invito</button>
             <button type="button" class="btn btn-primary btn-block m-1"
             onclick="eventManager.editing = true; pageNew('pageCategoryCreate')">Modifica Categoria</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Elimina Categoria</button>
+            <button type="button" class="btn btn-primary btn-block m-1 disabled">Elimina Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
         </div>
     </div>
@@ -27,16 +27,19 @@
         
         me.loadUtenti = function()
         {
-            eventManager.currEvent.getCategories(function(list)
+            eventManager.currEvent.currCategory.getUsers(function(list)
             {
-                eventManager.currEvent.categoryList = list;
                 for(let i=0; i<list.length; i++)
                 {
+                    let curr = list[i];
+                    eventManager.currEvent.currCategory.userList.push(new Profilo(curr.name, curr.id))
+                    
                     let btn = compNew("#listaUtenti", "userButton");
                     btn.setAttribute("data-utente", i)
-                    btn.querySelector("a").innerHTML = list[i].name
+                    btn.querySelector("a").innerHTML = curr.name
                 }
-            })          
+            })
+            
         }
 
         me.invito = function()
@@ -53,7 +56,7 @@
             callback()
         }
 
-        //me.loadUtenti()
+        me.loadUtenti()
         me.html.querySelector("#title").innerHTML = eventManager.currEvent.currCategory.name
     </script>
 

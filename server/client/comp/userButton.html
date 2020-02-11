@@ -2,9 +2,18 @@
 
 <template id="userButtonTemplate">
 
-    <li id="userButton" class="list-group-item" onclick="eventManager.currEvent.currCategory.selectUser(this.getAttribute('data-user'))">
-        <a id="text"></a>
-        <button class="btn btn-info d-inline messaggio btn-center-container p-0" >
+    <li id="userButton" class="list-group-item p-0">
+        <div style="width: 80%; padding: 0.75rem 1.25rem;" class="border">
+            <a id="text"></a>
+        </div>
+
+        <button class="btn btn-info d-inline messaggio btn-center-container p-0" 
+        onclick="
+        comunicationManager.sendType = msgType.user; 
+        comunicationManager.sendTo = eventManager.currEvent.currCategory.userList[this.parentElement.getAttribute('data-utente')]
+        pageNew('pageMessage');
+        return false;
+        ">
             <i class="far fa-envelope btn-center" style="transform: translateY(-1%); font-size: 4vh;"></i>
         </button>
     </li>

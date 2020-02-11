@@ -20,14 +20,14 @@
                 {
                     let obj =
                     {
-                        id          : firebase.auth().currentUser.uid,
+                        id          : profilo.id,
                         name        : profilo.name,
                         event       : invito.evento,
                         category    : invito.categoria,
                         invite      : invito.mittente,
                     }
 
-                    httpPost("segna",obj,function()
+                    httpPost("invitoSegna",obj,function()
                     {
                         
                     })

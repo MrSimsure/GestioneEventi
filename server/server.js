@@ -26,15 +26,11 @@ app.use("/client", express.static(__dirname + "/client"));
 
 app.get("/", function(req, res)  {  res.sendFile(__dirname + "/client/index.html");});   
 
-/////////////////////////////////////////////////////////////////////////UTENTI
 
-//RICEVI ID UTENTE
-app.post('/userID', function(req, res)
-{
-    console.log(req.body.id)
-});
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////UTENTI
 
-//RICEVI ID UTENTE
+
+//RICEVI IL NOME DI UN UTENTE DAL IL SUO ID
 app.post('/getUserName', function(req, res)
 {
     database.getUser(req.body.id, function(result)
@@ -46,6 +42,44 @@ app.post('/getUserName', function(req, res)
 
     
 });
+
+//QUANDO UN NUOVO UTENTE SI REGISTRA SALVA IL SUO NOME
+app.post('/newUser', function(req, res)
+{
+    database.addProfile(req.body.id, req.body.name)
+});
+
+//
+app.post('/userGetByCategory', function(req, res)
+{
+    let lista = []
+    let listaID = []
+    database.getMemberCategory(req.body.categoryID, function(resultID)
+    {
+        for(let i=0; i<resultID.length; i++)
+        {
+            lista.push({id:resultID[i].id})
+            listaID.push(resultID[i].id)
+        }
+        
+        database.getUsers(listaID, function(resultName)
+        {
+            for(let i=0; i<resultName.length; i++)
+            {
+                lista[i].name = resultName[i].name
+            }
+
+            res.send({
+                names : lista
+            });
+        })
+        
+    })
+
+    
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////INVITO
 
 //QUANDO UN UTENTE SELEZIONA UN LINK DI INVITO MANDAGLI LA PAGINA SPECIALE
 app.get('/invito', function(req, res)
@@ -60,27 +94,29 @@ app.get('/invito', function(req, res)
 });
 
 //QUANDO LA PAGINA SPECIALE DI INVITO VIENE APERTA E IL LOGIN EFFETTUATO MANDA AL SERVER LA RICHIESTA DI ACCETTAZIONE
-app.post('/segna', function(req, res)
+app.post('/invitoSegna', function(req, res)
 {
-    let respUser = database.updateUser(req.body.id, req.body.name, req.body.category, req.body.event, req.body.invite)
+    database.addUser(req.body.id, req.body.name, req.body.category, req.body.event, req.body.invite)
+});
 
-    res.send(
+app.post('/invitoAccetta', function(req, res)
+{
+    database.updateUser(req.body.userID, req.body.eventID, req.body.categoryID, function(ret)
     {
-        error : respUser
-    });
+        res.send({error : "done"});
+    })
+});
+
+app.post('/invitoRimuovi', function(req, res)
+{
+    database.removeUser(req.body.userID, req.body.eventID, req.body.categoryID, function(ret)
+    {
+        res.send({error : "done"});
+    })
 });
 
 
-app.post('/accetta', function(req, res)
-{
-    let respUser = database.addUser(req.body.id, req.body.evento, req.body.categoria, req.body.nome)
-    let respMess = database.sendMessage(ID, message, receiver, type)
-
-    res.send(
-    {
-        error : response
-    });
-});
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////NOTIFICHE E MESSAGGI
 
 app.post('/notificheGet', function(req, res)
 {
@@ -107,19 +143,7 @@ app.post('/sendMessage', function(req, res)
 });
 
 
-app.post('/newUser', function(req, res)
-{
-    let response1 = database.addUser(req.body.id, req.body.name)
-    let response2 = database.addProfile(req.body.id, req.body.name)
-
-    res.send(
-    {
-        error1 : response1,
-        error2 : response2
-    });
-});
-
-/////////////////////////////////////////////////////////////////////////EVENTI
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTI
 
 //RICEVI NUOVO EVENTO
 app.post('/eventCreate', function(req, res)
@@ -203,7 +227,7 @@ app.post('/eventGet', function(req, res)
 
 });
 
-/////////////////////////////////////////////////////////////////////////CATEGORIE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////CATEGORIE
 
 //RICEVI RICHIESTA DI CREARE UNA NUOVA CATEGORIA
 app.post('/categoryCreate', function(req, res)
@@ -264,6 +288,8 @@ app.post('/categoryMyList', function(req, res)
         });
     })
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.listen(process.env.PORT || 8200);
 console.log("server started");

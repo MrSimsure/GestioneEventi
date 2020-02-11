@@ -64,6 +64,43 @@ function httpPost(url, data, callback)
         request.send( $.param(data) );
     }
 
+
+
+function copyElementText(id) 
+{
+    var text = document.getElementById(id).innerText;
+    var elem = document.createElement("textarea");
+    document.body.appendChild(elem);
+    elem.value = text;
+    elem.select();
+    document.execCommand("copy");
+    document.body.removeChild(elem);
+}
+
+function checkDuplicateInObject(propertyName, inputArray) 
+{
+
+    testObject = {};
+  
+    inputArray.map(function(item) 
+    {
+      var itemPropertyName = item[propertyName];    
+      if (itemPropertyName in testObject) 
+      {
+        testObject[itemPropertyName].duplicate = true;
+        item.duplicate = true;
+
+        inputArray.remove(inputArray.indexOf(item))
+      }
+      else 
+      {
+        testObject[itemPropertyName] = item;
+        delete item.duplicate;
+      } 
+    });
+    return inputArray;
+  }
+
 /**
  * Aggiungi o sottrai un valore ad una variabile nel css
  * @param {string} nome

@@ -15,8 +15,8 @@
               <p style="font-size: 2.5vw;" id="codice">Modal body text goes here.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-primary" onclick="navigator.clipboard.writeText(document.getElementById('codice').innerHTML)">Copia</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#codiceInvito').remove()">Chiudi</button>
+              <button type="button" class="btn btn-primary" onclick="navigator.clipboard.writeText(document.getElementById('codice').innerText)">Copia</button>
+              <button type="button" class="btn btn-secondary" onclick="$('#codiceInvito').remove(); $('.modal-backdrop').remove()">Chiudi</button>
             </div>
           </div>
         </div>

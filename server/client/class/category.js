@@ -1,31 +1,28 @@
 class Categoria
 {
-    constructor(id, name, evento)
+    constructor(id, name, event)
     {
         this.id = id;
         this.name = name;
-        this.evento = evento;
+        this.event = event;
+
+        this.userList = [];
     }
 
 
-    getCategories(callback)
+    getUsers(callback)
     {
-        let obj = 
+        let obj =
         {
-            id : this.id
+            categoryID : this.id
         }
 
-        httpPost("categoryList", obj, function(ret)
-        {
-            let catList = ret.categoryList;
-            callback(catList)         
-            console.log(catList)
+        httpPost("userGetByCategory", obj, function(ret)
+        {    
+            let list = ret.names
+            console.log(list)
+            callback(list)
         })
     }
 
-    closeCategory()
-    {
-        eventManager.currEvent.currCategoryId = -1;
-        eventManager.currEvent.currCategory = null;
-    }
 }

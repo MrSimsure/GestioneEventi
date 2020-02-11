@@ -10,8 +10,8 @@
         <div class="dropdown-menu left-15" >
             <button type="button" class="btn btn-primary btn-block m-1" id="btnCategoria" onclick="pageNew('pageCategoryCreate')">Crea Nuova Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1" id="btnModifica"  onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
-            <button type="button" class="btn btn-primary btn-block m-1" id="btnElimina"   onclick="page().deleteEvent()">Elimina Evento</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Profilo</button>
+            <button type="button" class="btn btn-primary btn-block m-1 disabled" id="btnElimina"   onclick="page().deleteEvent()">Elimina Evento</button>
+            <button type="button" class="btn btn-primary btn-block m-1 disabled">Profilo</button>
             <button type="button" class="btn btn-primary btn-block m-1" id="btnBroadcast">Invia Broadcast</button>
             <button type="button" class="btn btn-primary btn-block m-1" id="btnNotifiche" onclick="pageNew('pageNotifiche')">Notifiche</button>
         </div>
@@ -54,12 +54,15 @@
         {
             eventManager.currEvent.getCategories(function(list)
             {
-                eventManager.currEvent.categoryList = list;
+                
                 for(let i=0; i<list.length; i++)
                 {
+                    let curr = list[i];
+                    eventManager.currEvent.categoryList.push(new Categoria(curr.id, curr.name, curr.event))
+                    
                     let btn = compNew("#listaCategorie", "categoryButton");
                     btn.setAttribute("data-categoria", i)
-                    btn.querySelector("a").innerHTML = list[i].name
+                    btn.querySelector("a").innerHTML = curr.name
                 }
 
                 if(callback != undefined)

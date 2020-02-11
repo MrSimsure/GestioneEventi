@@ -2,9 +2,19 @@
 
 <template id="categoryButtonTemplate">
 
-    <li id="categoryButton" class="list-group-item" onclick="eventManager.currEvent.selectCategory(this.getAttribute('data-categoria'))">
-        <a id="text"></a>
-        <button class="btn btn-info d-inline messaggio btn-center-container p-0" >
+    <li id="categoryButton" class="list-group-item p-0" >
+        
+        <div onclick="eventManager.currEvent.selectCategory(this.parentElement.getAttribute('data-categoria'))" style="width: 80%; padding: 0.75rem 1.25rem;" class="border">
+            <a id="text"></a>
+        </div>
+
+        <button class="btn btn-info d-inline messaggio btn-center-container p-0" 
+        onclick="
+        comunicationManager.sendType = msgType.category; 
+        comunicationManager.sendTo = eventManager.currEvent.categoryList[this.parentElement.getAttribute('data-categoria')]
+        pageNew('pageMessage');
+        return false;
+        ">
             <i class="far fa-envelope btn-center" style="transform: translateY(-1%); font-size: 4vh;"></i>
         </button>
     </li>

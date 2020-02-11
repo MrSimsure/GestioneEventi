@@ -408,9 +408,46 @@ database.addProfile = function(ID, name)
 }
 
 //AGGIUNIG UN NUOVO UTENTE
-database.addUser = function(ID, name)
+database.updateUser = function(userID, eventID, categoryID, callback)
 {
-    sql = "INSERT INTO users(id, name) VALUES ('"+ID+"'"+",'"+name+"');";
+    sql = "UPDATE `users` SET `invite`= null WHERE id = '"+userID+"' and event = '"+eventID+"' and category = '"+categoryID+"';";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) 
+        {
+            console.log("Impossibile aggiornare utente" + err); 
+            callback("error")
+        }
+        else{
+            callback("done")
+        }
+    });
+}
+
+//AGGIUNIG UN NUOVO UTENTE
+database.removeUser = function(userID, eventID, categoryID, callback)
+{
+    sql = "DELETE FROM `users` WHERE id = '"+userID+"' and event = '"+eventID+"' and category = '"+categoryID+"';";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) 
+        {
+            console.log("Impossibile aggiornare utente" + err); 
+            callback("error")
+        }
+        else{
+            callback("done")
+        }
+    });
+}
+
+//AGGIORNA I DATI DI UN UTENTE
+database.addUser = function(ID, name, category, event , invite)
+{ 
+    
+    sql = "INSERT INTO users(id, name, category, event, invite ) VALUES ('"+ID+"'"+",'"+name+"'"+",'"+category+"'"+",'"+event+"'"+",'"+invite+"');";
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err){
@@ -436,31 +473,46 @@ database.getUser = function(ID, callback)
     });
 }
 
-//AGGIORNA I DATI DI UN UTENTE
-database.updateUser = function(ID, name, category, event , invite)
-{ 
-    
-    sql = "INSERT INTO users(id, name, category, event, invite ) VALUES ('"+ID+"'"+",'"+name+"'"+",'"+category+"'"+",'"+event+"'"+",'"+invite+"');";
+//TORNA IL NOME DI UN UTENTE DATO IL SUO ID
+database.getUsers = function(usersID, callback)
+{
+    sql = "SELECT name FROM varnellidb.profiles";
     console.verbose("Stringa inviata: " + sql);
 
-    database.con.query(sql, function (err){
-        if(err) {console.log("Impossibile aggiornare utente" + err); return;}
+    sql += " WHERE id = "
+    for(let i=0; i<usersID.length; i++)
+    {
+        sql += "'"+usersID[i]+"'";
+        if(i != usersID.length-1)
+        {
+            sql += " or id ="
+        }
+        else
+        {
+            sql +=";"
+        }
+    }  
+    console.log(sql)
+
+    database.con.query(sql, function (err,result){
+        if(err) {console.log("Impossibile trovare utente" + err); return;}
         else{
-            return;
+            console.log(result)
+            callback(result)
         }
     });
 }
 
 //TROVA TUTTI GLI UTENTI CHE APPARTENGONO AD UNA CERTA CATEGORIA DATO L'ID DI QUESTA
-database.getMemberCategory = function(ID)
+database.getMemberCategory = function(categoryID, callback)
 {
-    sql = "SELECT * FROM users WHERE category like "+ID+";";
+    sql = "SELECT * FROM users WHERE category = '"+categoryID+"' and invite is null;;";
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err, result){
         if(err) {console.log("Impossibile individuare categoria" + err); return;}
         else{
-            return result[0].category;
+            callback(result)
         }
     });
 }

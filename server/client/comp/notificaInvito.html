@@ -4,8 +4,10 @@
 
     <li id="notificaInvito" class="list-group-item" >
         <a id="text"></a>
-        <button class="btn btn-success " >Accetta</button>
-        <button class="btn btn-danger d-inline " >Rifiuta</button>
+        <button class="btn btn-success" 
+        onclick="comunicationManager.invitoAccetta(this, function(dom){$(dom.parentElement).remove()})">Accetta</button>
+        <button class="btn btn-danger d-inline" 
+        onclick="comunicationManager.invitoRifiuta(this, function(dom){$(dom.parentElement).remove()})">Rifiuta</button>
     </li>
 
     

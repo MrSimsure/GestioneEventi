@@ -20,6 +20,7 @@ class EventManager
         httpPost("eventList", obj, function(ret)
         {
             let evList = ret.eventList;
+            evList = checkDuplicateInObject("id", evList) 
             callback(evList)         
             console.log(ret)
         })

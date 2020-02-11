@@ -23,6 +23,9 @@
                 {
                     let curr = list.notifiche[i]
                     let btn = compNew("#listaNotifiche", "notificaInvito");
+                    btn.setAttribute("data-id", curr.id)
+                    btn.setAttribute("data-category", curr.category)
+                    btn.setAttribute("data-event", curr.event)
                     btn.querySelector("#text").innerHTML = "L'utente "+curr.name+", vuole unirsi alla categoria "+curr.category+" dell'evento "+curr.event
                 }
                 
