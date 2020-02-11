@@ -1,6 +1,0 @@
-
-
--metodo che riceva i messaggi inviati e li salvi in "interactions" dato il mittente, il ricevitore, il messaggio e il tipo 
-(in base al tipo 'ricevitore' sarà o l'id di un utente o di un evento o di una categoria)
-
--metodo che ritorni tutti i messaggi dato id utente, id categoria e id evento e dalla tavola "interactions" ritorni ciascun messaggio
