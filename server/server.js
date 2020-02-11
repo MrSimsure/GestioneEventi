@@ -43,6 +43,26 @@ app.post('/getUserName', function(req, res)
     
 });
 
+//RICEVI IL NOME DI UN UTENTE DAL IL SUO ID
+app.post('/disponibilitaSet', function(req, res)
+{
+    database.disponibilitaSet(req.body.userID, req.body.disponibilita, function(result)
+    {
+    })
+});
+
+//RICEVI IL NOME DI UN UTENTE DAL IL SUO ID
+app.post('/disponibilitaGet', function(req, res)
+{
+    database.disponibilitaGet(req.body.userID, function(result)
+    {
+        res.send(
+        {
+            disponibilita : result
+        });
+    })
+});
+
 //QUANDO UN NUOVO UTENTE SI REGISTRA SALVA IL SUO NOME
 app.post('/newUser', function(req, res)
 {
@@ -163,6 +183,7 @@ app.post('/notificheUtente', function(req, res)
         });
     })
 });
+
 app.post('/sendMessage', function(req, res)
 {
     let response = database.sendMessage(req.body.id, req.body.name, req.body.subject, req.body.message, req.body.type, function()

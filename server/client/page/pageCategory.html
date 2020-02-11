@@ -45,6 +45,25 @@
                     let btn = compNew("#listaUtenti", "userButton");
                     btn.setAttribute("data-utente", i)
                     btn.querySelector("a").innerHTML = curr.name
+
+                    let obj = 
+                    {
+                        userID          : curr.id,
+                    }
+
+                    httpPost("disponibilitaGet", obj, function(ret)
+                    {
+                        let disp = ret.disponibilita.disponibilita
+                        
+                        if(disp == 1)
+                        {
+                            btn.querySelector("#disponibilita").classList.add("dot-green")
+                        }
+                        else
+                        {
+                            btn.querySelector("#disponibilita").classList.add("dot-red")
+                        }
+                    })
                 }
             })
             
@@ -75,7 +94,7 @@
 
         me.onBack = function(callback)
         {
-            //eventManager.currEvent.currCategory.closeUsers()
+            eventManager.currEvent.currCategory.closeUser()
             callback()
         }
 

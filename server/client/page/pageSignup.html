@@ -13,12 +13,14 @@
 
             <div class="form-group">
             <label for="loginMail">Email</label>
-            <input type="email" class="form-control" id="loginMail" placeholder="Enter email">
+            <input type="email" class="form-control" id="loginMail" placeholder="Enter email" onclick="this.classList.remove('is-invalid')">
+            <div class="invalid-feedback">Email gia usata</div>
             </div>
 
             <div class="form-group">
             <label for="loginPassword">Password</label>
-            <input type="password" class="form-control" id="loginPassword" placeholder="Password">
+            <input type="password" class="form-control" id="loginPassword" placeholder="Password" onclick="this.classList.remove('is-invalid')">
+            <div class="invalid-feedback">Password tropo corta (almeno 6 caratteri)</div>
             </div>
 
             <button onclick="page().register()" class="btn btn-primary">Registrati</button>
@@ -67,6 +69,16 @@
                 }).catch(error => 
                 {
                     console.error(error);
+
+                    if(error.code == "auth/weak-password")
+                    {
+                        me.password.classList.add("is-invalid")
+                    }
+
+                    if(error.code == "auth/email-already-in-use")
+                    {
+                        me.email.classList.add("is-invalid")
+                    }
                 })
             }     
 

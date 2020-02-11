@@ -18,6 +18,7 @@
             comunicationManager.sendTo = eventManager.eventList[eventManager.currEventId]
             pageNew('pageMessage');">Invia Broadcast</button>
             <button type="button" class="btn btn-primary btn-block m-1" id="btnNotifiche" onclick="pageNew('pageNotifiche')">Notifiche</button>
+            
         </div>
     </div>
 
@@ -39,6 +40,22 @@
         me.btnElimina =   page().html.querySelector("#btnElimina");
         me.btnBroadcast = page().html.querySelector("#btnBroadcast");
         me.btnNotifiche = page().html.querySelector("#btnNotifiche");
+        
+        me.switch = compNew("#testata", "switchDisponibile")
+
+        httpPost("disponibilitaGet", {userID: profilo.id,}, function(ret)
+        {
+            let disp = ret.disponibilita.disponibilita
+            
+            if(disp == 1)
+            {
+                me.switch.querySelector("input").checked = true
+            }
+            else
+            {
+                me.switch.querySelector("input").checked = false
+            }
+        })
 
         me.deleteEvent = function()
         {
@@ -77,6 +94,7 @@
             })          
         }
 
+
         me.loadMessaggi = function(callback)
         {
             eventManager.currEvent.getMessages(function(list)
@@ -95,6 +113,7 @@
         me.onBack = function(callback)
         {
             eventManager.closeEvent()
+            $( me.switch ).remove()
             callback()
         }
 

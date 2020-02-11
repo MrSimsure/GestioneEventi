@@ -31,7 +31,7 @@ database.checkConnection = function()
 }
 
 
-/////////////////////////////////////////////////////////////////////////EVENTI
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////EVENTI
 
 //CREA UN NUOVO EVENTO
 database.eventCreate = function(creatorID,name,dateStart,dateEnd, callback)
@@ -223,7 +223,7 @@ database.eventDelete = function(eventID){
     });
 }
 
-/////////////////////////////////////////////////////////////////////////CATEGORIE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////CATEGORIE
 
 //CREA UNA NUOVA CATEGORIA
 database.categoryCreate = function(eventID,name)
@@ -391,18 +391,51 @@ database.categoryDelete = function(categoryID)
     });
 }
 
-/////////////////////////////////////////////////////////////////////////UTENTI
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////UTENTI
 
 //AGGIUNIG UN NUOVO UTENTE
 database.addProfile = function(ID, name)
 {
-    sql = "INSERT INTO profiles(id, name) VALUES ('"+ID+"'"+",'"+name+"');";
+    sql = "INSERT INTO profiles(id, name, disponibilita) VALUES ('"+ID+"'"+",'"+name+"', 1);";
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err){
         if(err) {console.log("Impossibile inserire utente" + err); return;}
         else{
             return;
+        }
+    });
+}
+
+//AGGIUNIG UN NUOVO UTENTE
+database.disponibilitaSet = function(userID, disponibilita, callback)
+{
+    sql = "UPDATE `profiles` SET `disponibilita`= "+disponibilita+" WHERE id = '"+userID+"';";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err){
+        if(err) 
+        {
+            console.log("Impossibile aggiornare utente" + err); 
+            callback("error")
+        }
+        else{
+            callback("done")
+        }
+    });
+}
+
+//TORNA IL NOME DI UN UTENTE DATO IL SUO ID
+database.disponibilitaGet = function(userID, callback)
+{
+    sql = "SELECT disponibilita FROM varnellidb.profiles WHERE id = '"+userID+"'";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err,result){
+        if(err) {console.log("Impossibile trovare utente" + err); return;}
+        else{
+            console.log(result)
+            callback(result[0])
         }
     });
 }
@@ -517,6 +550,8 @@ database.getMemberCategory = function(categoryID, callback)
     });
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////NOTIFICHE
+
 database.notificheGetInvito = function(userID, eventID, callback)
 {
     sql = "SELECT * FROM varnellidb.users WHERE event = '"+eventID+"' and invite = '"+userID+"'";
@@ -576,7 +611,7 @@ database.notificheGetUser = function(userID, callback)
         }
     });
 }
-/////////////////////////////////////////////////////////////////////////MESSAGGI
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////MESSAGGI
 
 database.sendMessage = function(ID, name, receiver, message, type, callback)//type 1:persona 2:categoria 3:broadcast
 {  
@@ -590,8 +625,6 @@ database.sendMessage = function(ID, name, receiver, message, type, callback)//ty
         }
     });
 }
-
-
 
 //RITORNA TUTTI I MESSAGGI DI UN UTENTE DATO IL SUO ID CATEGORIA ED EVENTO
 database.getMessage = function(ID, categoryID, eventID)

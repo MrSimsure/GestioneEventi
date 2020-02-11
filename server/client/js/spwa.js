@@ -9,6 +9,7 @@ var comps =
     codiceInvito        : "codiceInvito",
     notificaInvito      : "notificaInvito",
     notificaMessaggio   : "notificaMessaggio",
+    switchDisponibile   : "switchDisponibile",
 }
 
 
