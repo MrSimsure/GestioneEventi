@@ -1,8 +1,5 @@
 
 
-- aggiungere a "eventCreate" sul server l'aggiungere alla tabella "users" il creatore dell'evento nella cateogira "ogranizzatori" 
-ma solo dopo che questa è stata creata, è necessarrio far mandare al client anche l'id del suddetto utente
-
 -metodo che riceva i messaggi inviati e li salvi in "interactions" dato il mittente, il ricevitore, il messaggio e il tipo 
 (in base al tipo 'ricevitore' sarà o l'id di un utente o di un evento o di una categoria)
 

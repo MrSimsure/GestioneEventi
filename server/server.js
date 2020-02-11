@@ -131,15 +131,47 @@ app.post('/notificheGet', function(req, res)
     
 });
 
+app.post('/notificheEvento', function(req, res)
+{
+    database.notificheGetEvento(req.body.eventID, function(ret)
+    {
+        res.send(
+        {
+            notifiche : ret
+        });
+    })
+});
 
+app.post('/notificheCategoria', function(req, res)
+{
+    database.notificheGetCategoria(req.body.categoryID, function(ret)
+    {
+        res.send(
+        {
+            notifiche : ret
+        });
+    })
+});
+
+app.post('/notificheUtente', function(req, res)
+{
+    database.notificheGetUser(req.body.userID, function(ret)
+    {
+        res.send(
+        {
+            notifiche : ret
+        });
+    })
+});
 app.post('/sendMessage', function(req, res)
 {
-    let response = database.addUser(req.body.id, req.body.messaggio, req.body.ricevitore, req.body.tipo)
-
-    res.send(
+    let response = database.sendMessage(req.body.id, req.body.name, req.body.subject, req.body.message, req.body.type, function()
     {
-        error : response
-    });
+        res.send(
+        {
+            error : response
+        });
+    })
 });
 
 

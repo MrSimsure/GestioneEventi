@@ -1,0 +1,45 @@
+<!doctype html>
+
+<template id="pageUserTemplate">
+<div id="pageUser" class="page">
+
+    <h1 id="title" class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+    <br>
+
+    <ul class="list-group" id="listaMessaggiUtente"></ul>
+
+
+    <script>
+        let me = page();
+        
+        me.loadMessaggi = function(callback)
+        {
+            eventManager.currEvent.currCategory.currUser.getMessages(function(list)
+            {
+                for(let i=0; i<list.length; i++)
+                {
+                    let curr = list[i];
+
+                    let btn = compNew("#listaMessaggiUtente", "notificaMessaggio");
+                    btn.querySelector("#mittente").innerHTML = curr.name
+                    btn.querySelector("#text").innerHTML = curr.object
+                }
+            })          
+        }
+
+
+        me.onBack = function(callback)
+        {
+            eventManager.currEvent.currCategory.closeUser()
+            callback()
+        }
+
+        me.loadMessaggi()
+        me.html.querySelector("#title").innerHTML = eventManager.currEvent.currCategory.currUser.name
+    </script>
+
+
+</div>
+</template>
+

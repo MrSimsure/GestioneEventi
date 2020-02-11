@@ -12,16 +12,23 @@
             <button type="button" class="btn btn-primary btn-block m-1" id="btnModifica"  onclick="eventManager.editing = true; pageNew('pageEventCreate')">Modifica Evento</button>
             <button type="button" class="btn btn-primary btn-block m-1 disabled" id="btnElimina"   onclick="page().deleteEvent()">Elimina Evento</button>
             <button type="button" class="btn btn-primary btn-block m-1 disabled">Profilo</button>
-            <button type="button" class="btn btn-primary btn-block m-1" id="btnBroadcast">Invia Broadcast</button>
+            <button type="button" class="btn btn-primary btn-block m-1" id="btnBroadcast"
+            onclick="
+            comunicationManager.sendType = msgType.event; 
+            comunicationManager.sendTo = eventManager.eventList[eventManager.currEventId]
+            pageNew('pageMessage');">Invia Broadcast</button>
             <button type="button" class="btn btn-primary btn-block m-1" id="btnNotifiche" onclick="pageNew('pageNotifiche')">Notifiche</button>
         </div>
     </div>
 
     <br>
 
-    <ul class="list-group" id="listaCategorie">
+    <ul class="list-group" id="listaCategorie"></ul>
 
-    </ul>
+    <br><br>
+    <h1  class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+    <ul class="list-group" id="listaMessaggiEvento"></ul>
 
 
     <script>
@@ -70,6 +77,21 @@
             })          
         }
 
+        me.loadMessaggi = function(callback)
+        {
+            eventManager.currEvent.getMessages(function(list)
+            {
+                for(let i=0; i<list.length; i++)
+                {
+                    let curr = list[i];
+
+                    let btn = compNew("#listaMessaggiEvento", "notificaMessaggio");
+                    btn.querySelector("#mittente").innerHTML = curr.name
+                    btn.querySelector("#text").innerHTML = curr.object
+                }
+            })          
+        }
+
         me.onBack = function(callback)
         {
             eventManager.closeEvent()
@@ -77,12 +99,11 @@
         }
 
         me.loadCategorie()
+        me.loadMessaggi()
         me.html.querySelector("#title").innerHTML = eventManager.currEvent.name
 
         if(eventManager.currEvent.configuratore == true)
-        {
-            
-        }else 
+        {}else 
         if(eventManager.currEvent.organizzatore == true)
         {
             htmlHide(btnCategoria);

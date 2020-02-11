@@ -2,22 +2,49 @@
 <template id="pageMessageTemplate">
     <div id="pageMessage" class="page">
         
-    
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Messaggio</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-            
-        <br>
-
-        <button type="button" class="btn btn-primary">Invia Messaggio</button>
-
-            <script>
-                let me = page()
-    
+        <div id="invioMsg">
+            <div class="form-group">
+                <label for="message">Messaggio</label>
+                <textarea class="form-control" id="message" rows="3"></textarea>
+            </div>
                 
- 
-            </script>
+            <br>
+
+            <button type="button" class="btn btn-primary" onclick="page().sendMessage()">Invia Messaggio</button>
+        </div>
+
+        <div id="avvisoInvio" style="display: none;">
+            <p>Messaggio inviato con successo</p>
+        </div>
+
+        <script>
+            let me = page()
+            me.messaggio    = page().html.querySelector("#message")
+            me.domScrittura = page().html.querySelector("#invioMsg")
+            me.domInvio     = page().html.querySelector("#avvisoInvio")
+            
+            me.onBack = function(callback)
+            {
+                clearInterval(comunicationManager.timeout)
+                callback()
+            }
+
+            me.sendMessage = function()
+            {
+                let msg = me.messaggio.value;
+                comunicationManager.sendMessage(msg, function()
+                {
+                    htmlHide(me.domScrittura)
+                    htmlShow(me.domInvio)
+                    
+                    comunicationManager.timeout = setTimeout(function()
+                    {
+                        pageBack()
+                    },5000)
+                })
+            }
+
+        </script>
     </div> 
     </template>
         

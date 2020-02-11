@@ -7,8 +7,38 @@ class Categoria
         this.event = event;
 
         this.userList = [];
+        this.currUser = null;
+        this.currUserId = -1;
     }
 
+
+    getMessages(callback)
+    {
+        let obj = 
+        {
+            categoryID : this.id
+        }
+
+        httpPost("notificheCategoria", obj, function(ret)
+        {
+            let lista = ret.notifiche;
+            callback(lista)         
+            console.log(lista)
+        })
+    }
+
+    selectUser(id)
+    {
+        this.currUserId = parseInt(id);
+        this.currUser = this.userList[this.currUserId]
+        pageNew("pageUser")
+    }
+
+    closeUser()
+    {
+        this.currUser = null;
+        this.currUserId = -1;
+    }
 
     getUsers(callback)
     {

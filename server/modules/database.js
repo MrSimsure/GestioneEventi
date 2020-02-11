@@ -531,18 +531,62 @@ database.notificheGetInvito = function(userID, eventID, callback)
         }
     });
 }
+
+database.notificheGetEvento = function(eventID, callback)
+{
+    sql = "SELECT * FROM varnellidb.interactions WHERE type = 0 and subject = '"+eventID+"'";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result) 
+    {
+        if (err) {console.log("Nessun evento trovato\n"+err); return;}
+        else 
+        {
+            callback(result)
+        }
+    });
+}
+
+database.notificheGetCategoria = function(categoryID, callback)
+{
+    sql = "SELECT * FROM varnellidb.interactions WHERE type = 1 and subject = '"+categoryID+"'";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result) 
+    {
+        if (err) {console.log("Nessun evento trovato\n"+err); return;}
+        else 
+        {
+            callback(result)
+        }
+    });
+}
+
+database.notificheGetUser = function(userID, callback)
+{
+    sql = "SELECT * FROM varnellidb.interactions WHERE type = 2 and subject = '"+userID+"'";
+    console.verbose("Stringa inviata: " + sql);
+
+    database.con.query(sql, function (err, result) 
+    {
+        if (err) {console.log("Nessun evento trovato\n"+err); return;}
+        else 
+        {
+            callback(result)
+        }
+    });
+}
 /////////////////////////////////////////////////////////////////////////MESSAGGI
 
-database.sendMessage = function(ID, message, receiver, type)//type 1:persona 2:categoria 3:broadcast
+database.sendMessage = function(ID, name, receiver, message, type, callback)//type 1:persona 2:categoria 3:broadcast
 {  
-    sql = "INSERT INTO communications(id,event,category,message,receiver,type VALUES ("+ID+",'"+message+"',"+receiver+","+type+");"
+    sql = "INSERT INTO interactions(id,name,subject,object,type) VALUES ('"+ID+"','"+name+"','"+receiver+"', '"+message+"',"+type+");"
     console.verbose("Stringa inviata: " + sql);
 
     database.con.query(sql, function (err){
         if(err) {console.log("impossibile inviare messaggio" + err); return;}
         else{
-            return;
-
+            callback()
         }
     });
 }

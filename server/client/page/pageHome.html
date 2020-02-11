@@ -3,85 +3,67 @@
 <div id="pageHome" class="page">
 
 
-    <div >
-
-        <div class="row mb-3">
-        <div class="col">
-            <button type="button" class="btn btn-primary btn-lg btn-block" onclick="pageNew('pageEventCreate')">Crea Nuovo Evento</button>
-        </div>     
-        </div>
-
-        <div class="row">
-        <div class="col">
-            <ul class="list-group" id="listaEventi" style="overflow-y:scroll; height: 70vh;">
-                
-            </ul>
-        </div>     
-        </div>
-
-    </div>
-
-
-    <ul class="list-group">
-
-    </ul>
-
-    <div  class="m-3 btn-center-cont" style="bottom:10px;">
-        <button class="btn btn-info btn-center" onclick="page().logout()">logout</button>
-    </div>
-
-
-    <script>
-        let me = page();
-
-        me.loadEventi = function(callback)
-        {
-            eventManager.getEvents(function(list)
-            {
-                for(let i=0; i<list.length; i++)
-                {
-                    eventManager.creaEvento(list[i])
-                    
-                    let btn = compNew("#listaEventi", "eventButton");
-                    btn.setAttribute("data-evento", i)
-                    btn.querySelector("a").innerHTML = list[i].name
-
-                    if(list[i].creator == profilo.id)
-                    {
-                        btn.style = "background-color:#fafab2"
-                    }
-                    
-                }
-
-                if(callback != undefined)
-                    callback()
-            })          
-        }
-
-
-        me.logout = function()
-        {
-            firebase.auth().signOut().then(function() 
-            {
-                console.log("logged out")
-                window.pageBack()
-            }).catch(function(error) 
-            {
-                console.log("error during log out")
-            });
-        }
-
-        me.onBack = function(callback)
-        {
-            eventManager.logout()
-            callback()
-        }
-
-        me.loadEventi()
-
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="pageNew('pageEventCreate')">Crea Nuovo Evento</button>
+        <br>
         
+        <ul class="list-group" id="listaEventi" style="overflow-y:scroll; height: 70vh;"></ul>
 
-    </script>
+        <div  class="m-3 btn-center-cont" style="bottom:10px;">
+            <button class="btn btn-info btn-center" onclick="page().logout()">logout</button>
+        </div>
+
+
+        <script>
+            let me = page();
+
+            me.loadEventi = function(callback)
+            {
+                eventManager.getEvents(function(list)
+                {
+                    for(let i=0; i<list.length; i++)
+                    {
+                        eventManager.creaEvento(list[i])
+                        
+                        let btn = compNew("#listaEventi", "eventButton");
+                        btn.setAttribute("data-evento", i)
+                        btn.querySelector("a").innerHTML = list[i].name
+
+                        if(list[i].creator == profilo.id)
+                        {
+                            btn.style = "background-color:#fafab2"
+                        }
+                        
+                    }
+
+                    if(callback != undefined)
+                        callback()
+                })          
+            }
+
+
+            me.logout = function()
+            {
+                firebase.auth().signOut().then(function() 
+                {
+                    console.log("logged out")
+                    window.pageBack()
+                }).catch(function(error) 
+                {
+                    console.log("error during log out")
+                });
+            }
+
+            me.onBack = function(callback)
+            {
+                eventManager.logout()
+                callback()
+            }
+
+            me.loadEventi()
+
+            
+
+        </script>
 
 
 </div>

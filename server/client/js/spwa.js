@@ -3,11 +3,12 @@
 
 var comps = 
 {
-    eventButton : "eventButton",                    //pulsanti 
-    categoryButton : "categoryButton",                    //pulsant
-    userButton : "userButton", 
-    notificaInvito : "notificaInvito",
-    codiceInvito : "codiceInvito"
+    eventButton         : "eventButton",                    //pulsanti 
+    categoryButton      : "categoryButton",                 //pulsant
+    userButton          : "userButton", 
+    codiceInvito        : "codiceInvito",
+    notificaInvito      : "notificaInvito",
+    notificaMessaggio   : "notificaMessaggio",
 }
 
 
@@ -21,6 +22,7 @@ var pages =
     pageHome            : "pageHome",                //lista degli eventi
     pageEvent           : "pageEvent",               //lista delle categorie
     pageCategory        : "pageCategory",            //invitati alla categoria
+    pageUser            : "pageUser",            //invitati alla categoria
     pageInvito          : "pageInvito",
     pageNotifiche       : "pageNotifiche",
     pageMessage         : "pageMessage"

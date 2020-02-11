@@ -1,5 +1,5 @@
 
-UrlMain = "http://127.0.0.1:8200/"
+UrlMain = "http://10.0.5.32:8200/"
 
 function loginFast()
 {

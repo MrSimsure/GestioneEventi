@@ -12,14 +12,22 @@
             <button type="button" class="btn btn-primary btn-block m-1"
             onclick="eventManager.editing = true; pageNew('pageCategoryCreate')">Modifica Categoria</button>
             <button type="button" class="btn btn-primary btn-block m-1 disabled">Elimina Categoria</button>
-            <button type="button" class="btn btn-primary btn-block m-1">Invia Broadcast</button>
+            <button type="button" class="btn btn-primary btn-block m-1"
+            onclick="
+            comunicationManager.sendType = msgType.category; 
+            comunicationManager.sendTo = eventManager.currEvent.categoryList[eventManager.currEvent.currCategoryId]
+            pageNew('pageMessage');
+            ">Invia Broadcast</button>
         </div>
     </div>
     <br>
 
-    <ul class="list-group" id="listaUtenti">
+    <ul class="list-group" id="listaUtenti"></ul>
 
-    </ul>
+    <br><br>
+    <h1  class="underline border-bottom border-primary" style="text-align: center;"></h1>
+
+    <ul class="list-group" id="listaMessaggiCategory"></ul>
 
 
     <script>
@@ -42,10 +50,25 @@
             
         }
 
+        me.loadMessaggi = function(callback)
+        {
+            eventManager.currEvent.currCategory.getMessages(function(list)
+            {
+                for(let i=0; i<list.length; i++)
+                {
+                    let curr = list[i];
+
+                    let btn = compNew("#listaMessaggiCategory", "notificaMessaggio");
+                    btn.querySelector("#mittente").innerHTML = curr.name
+                    btn.querySelector("#text").innerHTML = curr.object
+                }
+            })          
+        }
+
         me.invito = function()
         {
             let btn = compNew("body", "codiceInvito");
-            btn.querySelector("#codice").innerHTML = "http://localhost:8200/invito?evento="+eventManager.currEvent.id+"&categoria="+eventManager.currEvent.currCategory.id+"&mittente="+profilo.id;
+            btn.querySelector("#codice").innerHTML = UrlMain+"invito?evento="+eventManager.currEvent.id+"&categoria="+eventManager.currEvent.currCategory.id+"&mittente="+profilo.id;
             $('#codiceInvito').modal('show');
         }
 
@@ -57,6 +80,7 @@
         }
 
         me.loadUtenti()
+        me.loadMessaggi()
         me.html.querySelector("#title").innerHTML = eventManager.currEvent.currCategory.name
     </script>
 

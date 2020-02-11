@@ -6,13 +6,31 @@ class ComunicationManager
         this.sendTo = null;
     }
 
+    sendMessage(message, callback)
+    {
+        let obj = 
+        {
+            id       : profilo.id,
+            name     : profilo.name,
+            subject  : this.sendTo.id,
+            message  : message,
+            type     : this.sendType,
+        }
+
+        httpPost("sendMessage", obj, function()
+        {
+            callback()         
+        })
+    }
+
 
     loadNotifiche(callback)
     {
         let obj = 
         {
             eventID : eventManager.currEvent.id,
-            userID  : profilo.id
+            userID  : profilo.id,
+
         }
 
         httpPost("notificheGet", obj, function(ret)

@@ -23,10 +23,25 @@ class Evento
     }
 
 
+    getMessages(callback)
+    {
+        let obj = 
+        {
+            eventID : this.id
+        }
+
+        httpPost("notificheEvento", obj, function(ret)
+        {
+            let lista = ret.notifiche;
+            callback(lista)         
+            console.log(lista)
+        })
+    }
+
     getCategories(callback)
     {
-        if(this.configuratore == true)
-        {
+        //if(this.configuratore == true)
+        //{
             let obj = 
             {
                 eventID : this.id
@@ -37,6 +52,7 @@ class Evento
                 callback(catList)         
                 console.log(catList)
             })
+        /*
         }
         else
         {
@@ -52,6 +68,7 @@ class Evento
                 console.log(catList)
             })
         }
+        */
         
     }
 
