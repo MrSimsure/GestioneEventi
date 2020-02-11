@@ -1,5 +1,5 @@
 
-UrlMain = "http://10.0.5.32:8200/"
+UrlMain = window.location.href
 
 function loginFast()
 {
